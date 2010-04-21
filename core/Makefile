@@ -5375,6 +5375,10 @@ endif
 
 $(call declare-0p-target,$(INSTALLED_MISC_INFO_TARGET))
 
+ifneq ($(TARGET_OTA_ASSERT_DEVICE),)
+	$(hide) echo "ota_override_device=$(TARGET_OTA_ASSERT_DEVICE)" >> $@
+endif
+
 .PHONY: misc_info
 misc_info: $(INSTALLED_MISC_INFO_TARGET)
 
