@@ -25,8 +25,8 @@ $(call inherit-product-if-exists, frameworks/base/data/sounds/GoogleAudio.mk)
 
 # Additional settings used in all AOSP builds
 PRODUCT_PRODUCT_PROPERTIES += \
-    ro.config.ringtone=Titania.ogg \
-    ro.config.notification_sound=Tethys.ogg \
+    ro.config.ringtone=Zen.ogg \
+    ro.config.notification_sound=Chime.ogg \
 
 # The mainline checking whitelist, should be clean up
 PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
