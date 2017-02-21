@@ -3728,10 +3728,11 @@ endif
 $(BUILT_OTATOOLS_PACKAGE): $(OTATOOLS) $(OTATOOLS_DEPS) $(OTATOOLS_RELEASETOOLS) $(SOONG_ZIP)
 	@echo "Package OTA tools: $@"
 	$(hide) rm -rf $@ $(zip_root)
-	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools
+	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools $(zip_root)/vendor/potato/build/tools
 	$(call copy-files-with-structure,$(OTATOOLS),$(HOST_OUT)/,$(zip_root))
 	$(hide) cp $(SOONG_ZIP) $(zip_root)/bin/
 	$(hide) cp -r -d -p build/make/tools/releasetools/* $(zip_root)/releasetools
+	$(hide) cp -p vendor/potato/build/tools/getb64key.py $(zip_root)/vendor/potato/build/tools/
 	$(hide) rm -rf $@ $(zip_root)/releasetools/*.pyc
 	$(hide) $(SOONG_ZIP) -o $@ -C $(zip_root) -D $(zip_root) \
 	  -C . $(addprefix -f ,$(OTATOOLS_DEPS))
