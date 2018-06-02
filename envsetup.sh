@@ -662,6 +662,10 @@ function lunch()
     set_stuff_for_environment
     printconfig
     destroy_build_var_cache
+
+    echo "";
+    cat $(gettop)/build/make/potato_ascii_logo;
+    echo"";
 }
 
 # Tab completion for lunch.
