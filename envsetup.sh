@@ -664,10 +664,11 @@ function lunch()
 
     check_product $product
 
-    TARGET_PRODUCT=$product \
-    TARGET_BUILD_VARIANT=$variant \
-    TARGET_PLATFORM_VERSION=$version \
+    TARGET_PRODUCT=$product
+    TARGET_BUILD_VARIANT=$variant
+    TARGET_PLATFORM_VERSION=$version
     build_build_var_cache
+
     if [ $? -ne 0 ]
     then
         return 1
