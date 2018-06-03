@@ -673,15 +673,17 @@ function lunch()
     then
         # if we can't find the product, try to grab it from our github
         T=$(gettop)
-        pushd $T > /dev/null
+        C=$(pwd)
+        cd $T
         $T/vendor/potato/build/tools/roomservice.py $product
-        popd > /dev/null
+        cd $C
         check_product $product
     else
         T=$(gettop)
-        pushd $T > /dev/null
+        C=$(pwd)
+        cd $T
         $T/vendor/potato/build/tools/roomservice.py $product true
-        popd > /dev/null
+        cd $C
     fi
     if [ $? -ne 0 ]
     then
