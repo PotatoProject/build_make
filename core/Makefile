@@ -3047,6 +3047,9 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+	echo ""
+	cat $(gettop)/build/make/potato_ascii_logo
+	echo ""
 
 endif    # build_ota_package
 
