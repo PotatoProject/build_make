@@ -235,6 +235,9 @@ FIND_LEAVES_EXCLUDES := $(addprefix --prune=, $(SCAN_EXCLUDE_DIRS) .repo .git)
 $(call project-set-path-variant,ril,TARGET_RIL_VARIANT,hardware/ril)
 
 -include vendor/extra/BoardConfigExtra.mk
+ifneq ($(POTATO_BUILD),)
+include vendor/potato/config/BoardConfigPotato.mk
+endif
 
 # The build system exposes several variables for where to find the kernel
 # headers:
