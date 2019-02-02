@@ -55,6 +55,7 @@ LOCAL_MODULE := $(LOCAL_PACKAGE_NAME)
 ifneq ($(strip $(LOCAL_MODULE_CLASS)),)
 $(error $(LOCAL_PATH): Package modules may not set LOCAL_MODULE_CLASS)
 endif
+
 LOCAL_MODULE_CLASS := APPS
 
 intermediates := $(call local-intermediates-dir)
