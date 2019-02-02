@@ -479,6 +479,11 @@ LOCAL_CUSTOM_BUILD_STEP_INPUT:=
 LOCAL_CUSTOM_BUILD_STEP_OUTPUT:=
 LOCAL_IS_AUX_MODULE :=
 
+# Gradle and Flutter variables
+LOCAL_USES_GRADLE :=
+LOCAL_FLUTTER_SOURCE :=
+LOCAL_HAS_KT :=
+
 # Include any vendor specific clear_vars.mk file
 -include vendor/*/build/core/clear_vars.mk
 
