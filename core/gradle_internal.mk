@@ -16,8 +16,10 @@ ifneq ($(strip $(LOCAL_MODULE_CLASS)),)
 $(error $(LOCAL_PATH): Package modules may not set LOCAL_MODULE_CLASS)
 endif
 
-LOCAL_CERTIFICATE := PRESIGNED
 LOCAL_MODULE_CLASS := APPS
+ifeq ($(LOCAL_CERTIFICATE),)
+    LOCAL_CERTIFICATE := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
+endif
 
 intermediates := $(call local-intermediates-dir)
 intermediates.COMMON := $(call local-intermediates-dir,COMMON)
@@ -29,6 +31,9 @@ $(LOCAL_PACKAGE_NAME)_gradle_fake_root := $(intermediates)
 $(LOCAL_PACKAGE_NAME)_gradle_buildfile := $(intermediates)/build.gradle
 $(LOCAL_PACKAGE_NAME)_gradle_settingsfile := $(intermediates)/settings.gradle
 $(LOCAL_PACKAGE_NAME)_gradle_project_root := $(PWD)/$(LOCAL_PATH)
+$(LOCAL_PACKAGE_NAME)_uses_platform_apis := $(LOCAL_PRIVATE_PLATFORM_APIS)
+$(LOCAL_PACKAGE_NAME)_system_deps := $(call java-lib-deps,framework)
+$(LOCAL_PACKAGE_NAME)_system_libs_path := $(intermediates)/system_libs
 
 .PHONY: $(LOCAL_PACKAGE_NAME)_gradle_package_name
 
@@ -44,12 +49,27 @@ FLUTTER_EXEC := $(PWD)/external/flutter/bin/flutter
 LOCAL_PREBUILT_MODULE_FILE := \
   $($(LOCAL_PACKAGE_NAME)_gradle_fake_root)/gen/$($(LOCAL_PACKAGE_NAME)_gradle_package_name)/outputs/apk/release/$($(LOCAL_PACKAGE_NAME)_gradle_package_name)-release.apk
 
+ifeq ($($(LOCAL_PACKAGE_NAME)_uses_platform_apis), true)
+$(LOCAL_PREBUILT_MODULE_FILE): $($(LOCAL_PACKAGE_NAME)_system_deps)
+endif
+
 $(LOCAL_PREBUILT_MODULE_FILE): $(LOCAL_PACKAGE_NAME)_gradle_package_name $(GRADLE_EXEC) $(FLUTTER_EXEC)
+ifeq ($($(LOCAL_PACKAGE_NAME)_uses_platform_apis), true)
+	$(call copy_system_deps, $@)
+endif
 	$(call write_gradle_root, $@)
 	$(call gradle_build, $@)
 
-define write_gradle_root
+define copy_system_deps
 rm -rf $($($<)_gradle_fake_root)
+mkdir -p $($($<)_system_libs_path)
+cp $($($<)_system_deps) $($($<)_system_libs_path)/framework.jar
+endef
+
+define write_gradle_root
+if [[ "$($($<)_uses_platform_apis)" != "true" ]]; then \
+	rm -rf $($($<)_gradle_fake_root); \
+fi
 mkdir -p $($($<)_gradle_fake_root)/gen;
 echo "android.dir=$(PWD)" > $($($<)_gradle_fake_root)/local.properties
 if [[ "$($($<)_is_flutter_source)" = "true" ]]; then \
@@ -86,6 +106,17 @@ echo "        }" >> $($($<)_gradle_buildfile)
 echo "        google()" >> $($($<)_gradle_buildfile)
 echo "        jcenter()" >> $($($<)_gradle_buildfile)
 echo "    }" >> $($($<)_gradle_buildfile)
+if [[ "$($($<)_uses_platform_apis)" = "true" ]]; then \
+	echo "    afterEvaluate {" >> $($($<)_gradle_buildfile); \
+	echo "        if (plugins.hasPlugin('android') ||" >> $($($<)_gradle_buildfile); \
+	echo "                plugins.hasPlugin('com.android.application') ||" >> $($($<)_gradle_buildfile); \
+	echo "                plugins.hasPlugin('com.android.library')) {" >> $($($<)_gradle_buildfile); \
+	echo "            dependencies {" >> $($($<)_gradle_buildfile); \
+	echo "                compileOnly fileTree(dir: 'system_libs/', include: ['*.jar'])" >> $($($<)_gradle_buildfile); \
+	echo "            }" >> $($($<)_gradle_buildfile); \
+	echo "        }" >> $($($<)_gradle_buildfile); \
+	echo "    }" >> $($($<)_gradle_buildfile); \
+fi
 echo "}" >> $($($<)_gradle_buildfile)
 echo "" >> $($($<)_gradle_buildfile)
 echo "rootProject.buildDir = '$($($<)_gradle_fake_root)/gen'" >> $($($<)_gradle_buildfile)
