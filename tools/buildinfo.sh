@@ -74,6 +74,6 @@ if [ -n "$DEVICE_MAINTAINERS" ] ; then
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
-echo "ro.potato.device=$POTATO_DEVICE"
-
 echo "# end build properties"
+
+source vendor/potato/build/tools/buildinfo.sh;
