@@ -2537,6 +2537,7 @@ name := $(name)-target_files-$(FILE_NAME_TAG)
 
 intermediates := $(call intermediates-dir-for,PACKAGING,target_files)
 BUILT_TARGET_FILES_PACKAGE := $(intermediates)/$(name).zip
+BUILT_TARGET_FILES_PACKAGE_SIGNED := $(intermediates)/$(name)-signed.zip
 $(BUILT_TARGET_FILES_PACKAGE): intermediates := $(intermediates)
 $(BUILT_TARGET_FILES_PACKAGE): \
 		zip_root := $(intermediates)/$(name)
@@ -2982,8 +2983,22 @@ endif
 	$(hide) find $(zip_root) -path $(zip_root)/META -prune -o -print | sort >>$@.list
 	$(hide) $(SOONG_ZIP) -d -o $@ -C $(zip_root) -l $@.list
 
+$(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
+		 $(BUILT_TARGET_FILES_PACKAGE) \
+		 $(SIGNING_KEYS) \
+		 build/make/tools/releasetools/sign_target_files_apks.py
+	@echo "Package signed target files: $@"
+	$(hide) build/make/tools/releasetools/sign_target_files_apks.py \
+			-p $(HOST_OUT) \
+			-o \
+			-d $(SIGNING_KEYS) $(BUILT_TARGET_FILES_PACKAGE) \
+			$(BUILT_TARGET_FILES_PACKAGE_SIGNED)
+
 .PHONY: target-files-package
 target-files-package: $(BUILT_TARGET_FILES_PACKAGE)
+
+.PHONY: target-files-package-signed
+target-files-package-signed: $(BUILT_TARGET_FILES_PACKAGE_SIGNED)
 
 ifneq ($(filter $(MAKECMDGOALS),target-files-package),)
 $(call dist-for-goals, target-files-package, $(BUILT_TARGET_FILES_PACKAGE))
@@ -3034,18 +3049,21 @@ else
 endif
 endif
 
-$(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
+$(INTERNAL_OTA_PACKAGE_TARGET): \
+		$(if $(SIGNING_KEYS), $(BUILT_TARGET_FILES_PACKAGE_SIGNED), $(BUILT_TARGET_FILES_PACKAGE)) \
 		build/make/tools/releasetools/ota_from_target_files
+	printf $(if $(SIGNING_KEYS), $(SIGNING_KEYS)/releasekey, $(KEY_CERT_PAIR))
+	printf $(if $(SIGNING_KEYS), $(BUILT_TARGET_FILES_PACKAGE_SIGNED), $(BUILT_TARGET_FILES_PACKAGE))
 	@echo "Package OTA: $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   build/make/tools/releasetools/ota_from_target_files -v \
 	   --block \
-	   --extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE)) \
+	   $(if $(SIGNING_KEYS), , --extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE))) \
 	   -p $(HOST_OUT) \
-	   -k $(KEY_CERT_PAIR) \
+	   -k $(if $(SIGNING_KEYS), $(SIGNING_KEYS)/releasekey, $(KEY_CERT_PAIR))  \
 	   --backup=$(backuptool) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
-	   $(BUILT_TARGET_FILES_PACKAGE) $@
+	   $(if $(SIGNING_KEYS), $(BUILT_TARGET_FILES_PACKAGE_SIGNED), $(BUILT_TARGET_FILES_PACKAGE)) $@
 
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
