@@ -248,7 +248,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
   system_root_image = misc_info.get("system_root_image") == "true"
 
   for info in input_tf_zip.infolist():
-    if info.filename.startswith("IMAGES/"):
+    if info.filename.startswith("IMAGES/") or info.filename.endswith('/'):
       continue
 
     data = input_tf_zip.read(info.filename)
