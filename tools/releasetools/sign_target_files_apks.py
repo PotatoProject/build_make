@@ -297,7 +297,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
       print("Rewriting %s with new keys." % (info.filename,))
       new_data = ReplaceCerts(data)
       common.ZipWriteStr(output_tf_zip, out_info, new_data)
-    elif info.filename.startswith("SYSTEM/etc/permissions/"):
+    elif info.filename.startswith("SYSTEM/etc/permissions/") and not info.filename.endswith('/'):
       print("rewriting %s with new keys." % info.filename)
       new_data = ReplaceCerts(data)
       common.ZipWriteStr(output_tf_zip, out_info, new_data)
