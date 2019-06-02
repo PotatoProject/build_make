@@ -2537,6 +2537,7 @@ name := $(name)-target_files-$(FILE_NAME_TAG)
 
 intermediates := $(call intermediates-dir-for,PACKAGING,target_files)
 BUILT_TARGET_FILES_PACKAGE := $(intermediates)/$(name).zip
+BUILT_TARGET_FILES_PACKAGE_SIGNED := $(intermediates)/$(name)-signed.zip
 $(BUILT_TARGET_FILES_PACKAGE): intermediates := $(intermediates)
 $(BUILT_TARGET_FILES_PACKAGE): \
 		zip_root := $(intermediates)/$(name)
@@ -2982,8 +2983,20 @@ endif
 	$(hide) find $(zip_root) -path $(zip_root)/META -prune -o -print | sort >>$@.list
 	$(hide) $(SOONG_ZIP) -d -o $@ -C $(zip_root) -l $@.list
 
+$(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
+		 $(BUILT_TARGET_FILES_PACKAGE) \
+		 build/make/tools/releasetools/sign_target_files_apks.py
+	@echo "Sign target-files: $@"
+	$(hide) build/make/tools/releasetools/sign_target_files_apks.py \
+			-o \
+			-d .android-certs $(BUILT_TARGET_FILES_PACKAGE) \
+			$(BUILT_TARGET_FILES_PACKAGE_SIGNED)
+
 .PHONY: target-files-package
 target-files-package: $(BUILT_TARGET_FILES_PACKAGE)
+
+.PHONY: target-files-package-signed
+target-files-package-signed: $(BUILT_TARGET_FILES_PACKAGE_SIGNED)
 
 ifneq ($(filter $(MAKECMDGOALS),target-files-package),)
 $(call dist-for-goals, target-files-package, $(BUILT_TARGET_FILES_PACKAGE))
