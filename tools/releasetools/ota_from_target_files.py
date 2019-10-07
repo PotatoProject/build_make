@@ -974,11 +974,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
   if OPTIONS.backuptool:
-<<<<<<< HEAD
-    script.Mount("/system")
-    script.RunBackup("backup")
-    script.Unmount("/system")
-=======
     if is_system_as_root:
       script.fstab["/system"].mount_point = system_mount_point
     script.Mount("/system")
@@ -989,7 +984,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Unmount(system_mount_point)
     if is_system_as_root:
       script.fstab["/system"].mount_point = "/"
->>>>>>> aa6c2e645... build: Allow mounting system properly for A-only system-as-root devices
 
   system_progress = 0.75
 
