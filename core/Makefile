@@ -5006,6 +5006,10 @@ $(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
 		 $(BUILT_TARGET_FILES_PACKAGE) \
 		 $(AAPT) \
 		 $(AVBTOOL) \
+		 $(APEXER) \
+		 $(DEAPEXER) \
+		 $(DEBUGFS) \
+		 $(ZIPALIGN_HOST) \
 		 $(SIGN_TARGET_FILES_APKS)
 	@echo "Package signed target files: $@"
 	$(hide) $(SIGN_TARGET_FILES_APKS) \
