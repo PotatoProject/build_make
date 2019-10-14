@@ -5006,7 +5006,8 @@ $(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
 		 $(BUILT_TARGET_FILES_PACKAGE) \
 		 $(AAPT) \
 		 $(AVBTOOL) \
-		 $(SIGN_TARGET_FILES_APKS)
+		 $(SIGN_TARGET_FILES_APKS) \
+		 $(otatools)
 	@echo "Package signed target files: $@"
 	$(hide) $(SIGN_TARGET_FILES_APKS) \
 			-p $(HOST_OUT) \
