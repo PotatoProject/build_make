@@ -864,12 +864,13 @@ endif
 ifdef BUILDING_RAMDISK_IMAGE
 BOOT_RAMDISK_COMPRESSOR := $(MINIGZIP)
 RECOVERY_RAMDISK_COMPRESSOR := $(MINIGZIP)
+LZMA := prebuilts/tools-lineage/${HOST_OS}-x86/bin/lzma
 ifneq ($(LZMA_RAMDISK_TARGETS),)
   ifneq (,$(findstring boot,$(LZMA_RAMDISK_TARGETS)))
-    BOOT_RAMDISK_COMPRESSOR := lzma -f -c
+    BOOT_RAMDISK_COMPRESSOR := $(LZMA) -f -c
   endif
   ifneq (,$(findstring recovery,$(LZMA_RAMDISK_TARGETS)))
-    RECOVERY_RAMDISK_COMPRESSOR := lzma -f -c
+    RECOVERY_RAMDISK_COMPRESSOR := $(LZMA) -f -c
     TARGET_NOT_USE_GZIP_RECOVERY_RAMDISK := true
   endif
 endif
@@ -2118,7 +2119,7 @@ $(INSTALLED_DEBUG_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_DEBUG_RAMDISK_FILES) |
 	mkdir -p $(TARGET_DEBUG_RAMDISK_OUT)
 	touch $(TARGET_DEBUG_RAMDISK_OUT)/force_debuggable
 	rsync -a $(DEBUG_RAMDISK_SYNC_DIR)/ $(DEBUG_RAMDISK_ROOT_DIR)
-	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(MINIGZIP) > $@
+	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(BOOT_RAMDISK_COMPRESSOR) > $@
 
 .PHONY: ramdisk_debug-nodeps
 ramdisk_debug-nodeps: DEBUG_RAMDISK_SYNC_DIR := $(my_debug_ramdisk_sync_dir)
@@ -2128,7 +2129,7 @@ ramdisk_debug-nodeps: $(MKBOOTFS) | $(MINIGZIP)
 	mkdir -p $(TARGET_DEBUG_RAMDISK_OUT)
 	touch $(TARGET_DEBUG_RAMDISK_OUT)/force_debuggable
 	rsync -a $(DEBUG_RAMDISK_SYNC_DIR)/ $(DEBUG_RAMDISK_ROOT_DIR)
-	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(MINIGZIP) > $(INSTALLED_DEBUG_RAMDISK_TARGET)
+	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(BOOT_RAMDISK_COMPRESSOR) > $(INSTALLED_DEBUG_RAMDISK_TARGET)
 
 my_debug_ramdisk_sync_dir :=
 my_debug_ramdisk_root_dir :=
