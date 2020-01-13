@@ -721,14 +721,14 @@ function lunch()
         T=$(gettop)
         C=$(pwd)
         cd $T
-        $T/vendor/potato/build/tools/roomservice.py $product
+        #$T/vendor/potato/build/tools/roomservice.py $product
         cd $C
         check_product $product
     else
         T=$(gettop)
         C=$(pwd)
         cd $T
-        $T/vendor/potato/build/tools/roomservice.py $product true
+        #$T/vendor/potato/build/tools/roomservice.py $product true
         cd $C
     fi
     if [ $? -ne 0 ]
@@ -1893,7 +1893,6 @@ if [ -z ${CCACHE_EXEC} ]; then
     ccache_path=$(which ccache)
     if [ ! -z "$ccache_path" ]; then
         export USE_CCACHE=1
-        export CCACHE_COMPRESS=1
         export CCACHE_EXEC="$ccache_path"
         echo -e "\e[1mccache enabled and \e[32m\e[4mCCACHE_EXEC\e[0m \e[1mhas been set to : \e[4m$ccache_path\e[0m"
     else
