@@ -4341,7 +4341,6 @@ endif # BOARD_SUPER_PARTITION_GROUPS
 
 $(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
 		 $(BUILT_TARGET_FILES_PACKAGE) \
-		 $(SIGNING_KEYS) \
 		 $(AAPT) \
 		 $(AVBTOOL) \
 		 build/make/tools/releasetools/sign_target_files_apks.py
