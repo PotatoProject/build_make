@@ -58,3 +58,5 @@ if [ -n "$BUILD_THUMBPRINT" ] ; then
 fi
 
 echo "# end build properties"
+
+VEN_INFO=vendor/potato/build/tools/buildinfo.sh && test -f $VEN_INFO && source $VEN_INFO
