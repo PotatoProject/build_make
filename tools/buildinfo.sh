@@ -58,3 +58,5 @@ fi
 echo "ro.potato.device=$POTATO_DEVICE"
 
 echo "# end build properties"
+
+VEN_INFO=vendor/potato/build/tools/buildinfo.sh && test -f $VEN_INFO && source $VEN_INFO
