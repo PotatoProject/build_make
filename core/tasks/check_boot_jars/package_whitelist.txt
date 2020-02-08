@@ -249,3 +249,7 @@ org\.chromium\.arc\..*
 ###################################################
 # CodeAurora packages
 org\.codeaurora\..*
+
+###################################################
+# Lineage touch hal
+vendor.lineage.touch.*
