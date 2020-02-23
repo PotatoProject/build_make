@@ -4245,6 +4245,11 @@ ifdef BOARD_PREBUILT_ODMIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_ODMIMAGE_TARGET) $(zip_root)/IMAGES/
 endif
+ifdef BOARD_PREBUILT_EXTRA_IMAGES
+	$(hide) mkdir -p $(zip_root)/IMAGES
+	$(hide) $(foreach img,$(BOARD_PREBUILT_EXTRA_IMAGES), \
+	    cp $(img) $(zip_root)/IMAGES/;)
+endif
 ifdef INSTALLED_DTBOIMAGE_TARGET
 	$(hide) mkdir -p $(zip_root)/PREBUILT_IMAGES
 	$(hide) cp $(INSTALLED_DTBOIMAGE_TARGET) $(zip_root)/PREBUILT_IMAGES/
