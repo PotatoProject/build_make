@@ -37,6 +37,7 @@ PRODUCT_PACKAGES += \
     Bluetooth \
     BluetoothMidiService \
     BookmarkProvider \
+    BuiltInPrintService \
     CalendarProvider \
     cameraserver \
     CaptivePortalLogin \
@@ -57,6 +58,8 @@ PRODUCT_PACKAGES += \
     MusicFX \
     OsuLogin \
     PacProcessor \
+    PrintRecommendationService \
+    PrintSpooler \
     ProxyHandler \
     screenrecord \
     SecureElement \
