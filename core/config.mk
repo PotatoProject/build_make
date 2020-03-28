@@ -1168,16 +1168,13 @@ dont_bother_goals := out \
     product-graph dump-products
 
 -include vendor/extra/BoardConfigExtra.mk
-ifneq ($(POTATO_BUILD),)
 include vendor/potato/config/BoardConfigPotato.mk
-endif
 
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
 
-ifneq ($(POTATO_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
 $(eval include device/potato/sepolicy/common/sepolicy.mk)
@@ -1190,7 +1187,6 @@ $(eval include device/potato/sepolicy/common/sepolicy.mk)
 
 # Rules for MTK targets
 -include $(TOPDIR)vendor/*/build/core/mtk_target.mk
-endif
 
 -include external/linux-kselftest/android/kselftest_test_list.mk
 -include external/ltp/android/ltp_package_list.mk
