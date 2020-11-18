@@ -1242,14 +1242,14 @@ dont_bother_goals := out \
     vbmetaimage-nodeps \
     product-graph dump-products
 
+## We need to be sure the global selinux policies are included
+## last, to avoid accidental resetting by device configs
+$(eval include device/potato/sepolicy/common/sepolicy.mk)
+
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
-
-## We need to be sure the global selinux policies are included
-## last, to avoid accidental resetting by device configs
-$(eval include device/potato/sepolicy/common/sepolicy.mk)
 
 # Include any vendor specific config.mk file
 -include $(TOPDIR)vendor/*/build/core/config.mk
