@@ -267,6 +267,7 @@ python_library_host {
         "signapk",
         "toybox",
         "unpack_bootimg",
+        "zipalign",
     ],
 }
 
