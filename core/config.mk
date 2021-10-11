@@ -1165,11 +1165,11 @@ dont_bother_goals := out \
 include $(BUILD_SYSTEM)/android_soong_config_vars.mk
 
 ifneq ($(POTATO_BUILD),)
-#ifneq ($(wildcard device/potato/sepolicy/common/sepolicy.mk),)
+ifneq ($(wildcard device/potato/sepolicy/common/sepolicy.mk),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-#$(eval include device/potato/sepolicy/common/sepolicy.mk)
-#endif
+$(eval include device/potato/sepolicy/common/sepolicy.mk)
+endif
 endif
 
 ifeq ($(CALLED_FROM_SETUP),true)
