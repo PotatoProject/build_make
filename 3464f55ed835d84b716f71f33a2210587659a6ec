@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e140b58f_1ac60acf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000165
+      },
+      "writtenOn": "2021-10-20T11:04:54Z",
+      "side": 1,
+      "message": "Can reuse PRODUCT_PRODUCT_PROPERTIES instead",
+      "revId": "3464f55ed835d84b716f71f33a2210587659a6ec",
+      "serverId": "8720d348-3d66-43e6-b480-1d69039ac554"
+    }
+  ]
+}
