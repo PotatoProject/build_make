@@ -1900,6 +1900,10 @@ if [ -z ${CCACHE_EXEC} ]; then
     fi
 fi
 
+if [ -z ${CCACHE_DIR} ] && [ ! -z ${CCACHE_EXEC} ]; then
+    export CCACHE_DIR="$(${CCACHE_EXEC} -s | head -n 1 | awk '{print $3}')"
+fi
+
 export ANDROID_BUILD_TOP=$(gettop)
 
 . $ANDROID_BUILD_TOP/vendor/potato/build/envsetup.sh
