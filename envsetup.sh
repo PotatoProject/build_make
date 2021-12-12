@@ -709,28 +709,25 @@ function lunch()
         return 1
     fi
 
-    check_product $product
+    if ! check_product $product
+    then
+        # if we can't find a product, try to grab it from our github
+        T=$(gettop)
+        cd $T > /dev/null
+        vendor/potato/build/tools/roomservice.py $product
+        cd - > /dev/null
+        check_product $product
+    else
+        T=$(gettop)
+        cd $T > /dev/null
+        vendor/potato/build/tools/roomservice.py $product true
+        cd - > /dev/null
+    fi
 
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
     TARGET_PLATFORM_VERSION=$version \
     build_build_var_cache
-    if [ $? -ne 0 ]
-    then
-        # if we can't find the product, try to grab it from our github
-        T=$(gettop)
-        C=$(pwd)
-        cd $T
-        $T/vendor/potato/build/tools/roomservice.py $product
-        cd $C
-        check_product $product
-    else
-        T=$(gettop)
-        C=$(pwd)
-        cd $T
-        $T/vendor/potato/build/tools/roomservice.py $product true
-        cd $C
-    fi
     if [ $? -ne 0 ]
     then
         echo
