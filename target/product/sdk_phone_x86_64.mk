@@ -27,6 +27,9 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)
 
+# Inherit POSP common configuration
+$(call inherit-product-if-exists, vendor/potato/config/common.mk)
+
 # Enable mainline checking for exact this product name
 ifeq (sdk_phone_x86_64,$(TARGET_PRODUCT))
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := relaxed
